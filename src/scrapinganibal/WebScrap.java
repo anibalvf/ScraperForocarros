@@ -18,14 +18,17 @@ public class WebScrap {
     
    
     
-    public WebScrap(){
-        this.link = "https://www.forocoches.com/";
+    public WebScrap(String url){
+        this.link = url;
         try{
             this.doc = Jsoup.connect(this.link).get();
         }catch(IOException e){
           e.printStackTrace();
         }
     }
+    
+    
+    
     
 //    public Document defalutWeb (){
 //        Document doc;

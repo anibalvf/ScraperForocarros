@@ -14,13 +14,14 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
    private JLabel titulop; // etiqueta normal
    private JButton cerrar,abrirTodos; // boton normal
    private JTextField rellenar; // cuadro para rellenar de texto
-   private JButton opcion1,opcion2,opcion3; // mas botones
+   private JButton opcion1,opcion2,opcion3,opcion4; // mas botones
    private JTextArea textarea; // text area
    private JScrollPane scroll;// el scroll del texArea
    private JMenuBar menubar; // Añade un menubar
    private JMenu menu; // añade un componente al menubar
    private JMenuItem menuitem1, menuitem2; // añade componentes dentro del menu
    private JLabel Seleccion;
+   private JTextField rellenarURL;
   
    
    public Iu(){
@@ -103,11 +104,21 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
    opcion3= new JButton("Busqueda por palabra"); 
    opcion3.setBounds(30, 500, 250, 30); 
    add(opcion3);
-   opcion3.addActionListener(this); 
+   opcion3.addActionListener(this);
+   
+   opcion4= new JButton("Descargar img de post"); 
+   opcion4.setBounds(30, 550, 250, 30); 
+   add(opcion4);
+   opcion4.addActionListener(this); 
    
    rellenar = new JTextField(); // es un recuadro para recoger codigo
    rellenar.setBounds(300,500,300,30);
    add(rellenar);
+   
+   rellenarURL = new JTextField(); //rellenar con url para descargar imagenes del post
+   rellenarURL.setBounds(300,550,300,30);
+   add(rellenarURL);
+   
    
    }
    
@@ -155,9 +166,21 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
             setSize(1000,1000);   // cambiar la resolucion de la ventana
         }
         if(e.getSource()==abrirTodos){
+            if (Seleccion.getText().isEmpty()) {
+                
+            }else{
             scr.abrirNavegador(Seleccion.getText().toLowerCase());
+            }
+            }
+        if (e.getSource()==opcion4) {
+            DownloadImages dw = new DownloadImages();
+            labelUNO.setText("Opcion Descargar IMG");
+            
+            textarea.setText("Imagenes descargadas en carpeta");
+            
+            dw.DWI(rellenarURL.getText());
+            
         }
-        
         
     }
     
