@@ -32,7 +32,7 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
    setTitle("FCScraperByAnibal"); // el titulo arriba del programa
    setIconImage(new ImageIcon(getClass().getResource("\\resources\\icon.jpg")).getImage()); // el icono del programa
    
-   ImageIcon imagen = new ImageIcon("\\resources\\cabez.jpg");
+   //ImageIcon imagen = new ImageIcon("\\resources\\cabez.jpg");
    
    imagencab= new JLabel(); //inicializamos la etiqueta con el contenido
    imagencab.setBounds(35,30,100,200); // donde queremos que este la etiqueta dentro de la iu
