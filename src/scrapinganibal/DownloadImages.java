@@ -4,102 +4,179 @@
  * and open the template in the editor.
  */
 package scrapinganibal;
-import java.io.*;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.jsoup.Jsoup;
+import java.net.URLConnection;
  
-import org.jsoup.nodes.Attributes;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 /**
  *
  * @author anibal
  */
 public class DownloadImages {
  
-   int cont=0;
+   
  
     //The path of the folder that you want to save the images to
-    private  String folderPath = "C:\\Users\\aniba\\Desktop\\testfc";
+   public static String folderPath = "C:\\Users\\aniba\\Desktop\\testfc";
  
-    public void DWI(String url) {
- 
-        try { 
- 
-            
-            Document doc = Jsoup.connect(url).get();//Conectamos con la pagina y guardamos todo en doc
- 
-            
-            Elements img = doc.getElementsByTag("img"); //filtramos todas las images con la etiquera "img" y las Guardamos en IMG que es un "arraylist" de imagenes las cuales sacamos de doc
- 
-            for (Element el : img) { //bucle para recorrer todos los elemenetos de IMG arrayList de imagenes
-                    if (el.className().equals("imgpost")) {
-                        
-                String src = el.absUrl("src"); //de cada imagen sacamos el src que nos lleva al source
-                
-                getImages(src); //metodo para guardar la imagen
-                            
-                
-                }
-                
-              
-                
-            }
- 
-        } catch (IOException ex) {
-            System.err.println("ERROR Revisa los parametros");
-            Logger.getLogger(DownloadImages.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
- 
-    private void getImages(String src) throws IOException {
-        String aux="/";
+    public void DWI(String url) throws IOException {
+        boolean enc= false;
         
-//        String folder = null; //inicializamos el string que contiene el directorio de la carpeta donde queramos guardar imagenes
- 
-       
-//        int indexname = src.lastIndexOf("/"); //extrae el nombre de la imagen desde el link o src
-// 
-//        if (indexname == src.length()) {
-//            src = src.substring(1, indexname);
-//        }
-//        
-       
-        //indexname = src.lastIndexOf("/");
-        
-       // String name = src.substring(indexname, src.length()); // asigna un nombre a la imagen para guardarla
-        String name1 = aux+=cont;
-       // System.out.println(name);
- 
-        //Open a URL Stream
-        URL url = new URL(src);
-       
-        InputStream in = new BufferedInputStream(url.openStream()) ;
-        
-         HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
-         httpcon.addRequestProperty("User-Agent", "Mozilla/4.76");
+         Document documento = Jsoup
+                .connect(url)
+                .userAgent("Mozilla/5.0")
+                .timeout(10 * 1000)
+                .get();
          
-     
- 	
+         Elements pagPosta = documento.select("td");
         
- 
-        OutputStream out = new BufferedOutputStream(new FileOutputStream( folderPath+ name1+".jpg"));
- 
-        for (int b; (b = in.read()) != -1;) {
-            out.write(b);
+         for(Element td:pagPosta){
+        
+         if (td.className().equals("vbmenu_control") && td.text().contains("Pág")) {
+             enc= true;
+             
+             
+         }}
+        
+        
+        if (enc==true) {
+            Document document = Jsoup
+                .connect(url)
+                .userAgent("Mozilla/5.0")
+                .timeout(10 * 1000)
+                .get();
+         
+         Elements pagPost = document.select("td");
+        
+         for(Element td:pagPost){
+        
+         if (td.className().equals("vbmenu_control") && td.text().contains("Pág")) {
+             
+              
+                 String almacen = td.text();
+                 
+                 
+                  System.out.println(almacen);
+                  String almacen2= almacen.substring(9);
+                  System.out.println(almacen2);
+                 
+                  
+                  
+                 int pasarCadena = Integer.parseInt(almacen2);
+                 
+                 do {
+                     Document document1 = Jsoup
+                .connect(url+"&page="+pasarCadena)
+                .userAgent("Mozilla/5.0")
+                .timeout(10 * 1000)
+                .get();
+                     System.out.println(url+"&page="+pasarCadena);
+        
+        //select all img tags
+        Elements imageElements = document1.select("img");
+        
+        //iterate over each image
+        for(Element imageElement : imageElements){
+            if (imageElement.className().equals("imgpost")) {
+                 //make sure to get the absolute URL using abs: prefix
+            String strImageURL = imageElement.attr("abs:src");
+            
+            //download image one by one
+            downloadImage(strImageURL);
+            }
+            
+            
         }
-        out.close();
-        in.close();
-        cont++;
+                 pasarCadena--;
+                
+             } while ( pasarCadena>0);
+             
+         }
+         
+         }
+            
+        }else{
+            
+                     Document document1 = Jsoup
+                .connect(url)
+                .userAgent("Mozilla/5.0")
+                .timeout(10 * 1000)
+                .get();
+                     System.out.println(url);
+        
+        //select all img tags
+        Elements imageElements = document1.select("img");
+        
+        //iterate over each image
+        for(Element imageElement : imageElements){
+            if (imageElement.className().equals("imgpost")) {
+                 //make sure to get the absolute URL using abs: prefix
+            String strImageURL = imageElement.attr("abs:src");
+            
+            //download image one by one
+            downloadImage(strImageURL);
+            }
+            
+            
+        }
+            
+            
+            
+        }
+        
+          
+ 
     }
-}    
-
+ 
+     private static void downloadImage(String strImageURL){
+        
+        //get file name from image path
+        String strImageName = 
+                strImageURL.substring( strImageURL.lastIndexOf("/") + 1 );
+        
+        System.out.println("Saving: " + strImageName + ", from: " + strImageURL);
+        
+        try {
+            
+            //open the stream from URL
+             URL urlImage = new URL(strImageURL);
+             URLConnection urlc = urlImage.openConnection();
+             urlc.setRequestProperty("User-Agent", "Mozilla 5.0 (Windows; U; "
+             + "Windows NT 5.1; en-US; rv:1.8.0.11) ");
+              InputStream in = urlc.getInputStream();
+//            
+//            URL urlImage = new URL(strImageURL);
+//            InputStream in = urlImage.openStream();
+            
+            byte[] buffer = new byte[4096];
+            int n = -1;
+            
+            OutputStream os = 
+                new FileOutputStream( folderPath + "/" + strImageName );
+            
+            //write bytes to the output stream
+            while ( (n = in.read(buffer)) != -1 ){
+                os.write(buffer, 0, n);
+            }
+            
+            //close the stream
+            os.close();
+            
+            System.out.println("Image saved");
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
+     
+     
+    }

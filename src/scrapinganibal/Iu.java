@@ -5,8 +5,11 @@ import java.awt.Container;
 import java.awt.Point;
 import javax.swing.*; // importa la libreria para hacer interfaces graficas
 import java.awt.event.*; // importa la libreria para controlar eventos
+import java.io.IOException;
 import java.net.URI;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu hereda las caracteristicas de JFrame y le implementao la escucha de eventos
     
@@ -175,10 +178,14 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
         if (e.getSource()==opcion4) {
             DownloadImages dw = new DownloadImages();
             labelUNO.setText("Opcion Descargar IMG");
-            
             textarea.setText("Imagenes descargadas en carpeta");
-            
-            dw.DWI(rellenarURL.getText());
+
+            try {
+               dw.DWI(rellenarURL.getText());
+           } catch (IOException ex) {
+               Logger.getLogger(Iu.class.getName()).log(Level.SEVERE, null, ex);
+           }
+           
             
         }
         
