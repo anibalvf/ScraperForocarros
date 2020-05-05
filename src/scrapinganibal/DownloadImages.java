@@ -22,8 +22,6 @@ import org.jsoup.select.Elements;
  */
 public class DownloadImages {
  
-   
- 
     //The path of the folder that you want to save the images to
    public static String folderPath = "C:\\Users\\aniba\\Desktop\\testfc";
     //public static String folderPath = "D:\testforocoches";
@@ -154,15 +152,12 @@ public class DownloadImages {
              urlc.setRequestProperty("User-Agent", "Mozilla 5.0 (Windows; U; "
              + "Windows NT 5.1; en-US; rv:1.8.0.11) ");
               InputStream in = urlc.getInputStream();
-//            
-//            URL urlImage = new URL(strImageURL);
-//            InputStream in = urlImage.openStream();
+
             
             byte[] buffer = new byte[4096];
             int n = -1;
             
-            OutputStream os = 
-                new FileOutputStream( folderPath + "/" + strImageName );
+            OutputStream os =new FileOutputStream( folderPath + "/" + strImageName );
             
             //write bytes to the output stream
             while ( (n = in.read(buffer)) != -1 ){
