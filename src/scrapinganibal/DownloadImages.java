@@ -26,6 +26,8 @@ public class DownloadImages {
  
     //The path of the folder that you want to save the images to
    public static String folderPath = "C:\\Users\\aniba\\Desktop\\testfc";
+    //public static String folderPath = "D:\testforocoches";
+   
  
     public void DWI(String url) throws IOException {
         boolean enc= false;
