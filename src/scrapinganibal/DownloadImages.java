@@ -24,28 +24,11 @@ public class DownloadImages {
  
     //The path of the folder that you want to save the images to
    public static String folderPath = "C:\\Users\\aniba\\Desktop\\testfc";
-    //public static String folderPath = "D:\testforocoches";
+   
    
  
     public void DWI(String url) throws IOException {
-        boolean enc= false;
-        
-         Document documento = Jsoup
-                .connect(url)
-                .userAgent("Mozilla/5.0")
-                .timeout(10 * 1000)
-                .get();
-         
-         Elements pagPosta = documento.select("td");
-        
-         for(Element td:pagPosta){
-        
-         if (td.className().equals("vbmenu_control") && td.text().contains("Pág")) {
-             enc= true;
-             
-             
-         }}
-        
+        boolean enc= encMasPag(url);
         
         if (enc==true) {
             Document document = Jsoup
@@ -67,7 +50,7 @@ public class DownloadImages {
                   System.out.println(almacen);
                   String almacen2= almacen.substring(9);
                   System.out.println(almacen2);
-                 
+                  
                   
                   
                  int pasarCadena = Integer.parseInt(almacen2);
@@ -101,11 +84,12 @@ public class DownloadImages {
              
          }
          
-         }
+        }
             
         }else{
             
-                     Document document1 = Jsoup
+            
+                Document document1 = Jsoup
                 .connect(url)
                 .userAgent("Mozilla/5.0")
                 .timeout(10 * 1000)
@@ -123,19 +107,12 @@ public class DownloadImages {
             
             //download image one by one
             downloadImage(strImageURL);
-            }
-            
-            
+          }
         }
-            
-            
-            
-        }
-        
-          
+       }
  
     }
- 
+        //metodo para descargar cada imagen
      private static void downloadImage(String strImageURL){
         
         //get file name from image path
@@ -174,6 +151,26 @@ public class DownloadImages {
         }
         
     }
+        // metodo para comprobar si el hilo tienes mas de una sola pagina 
+     private boolean encMasPag(String url) throws IOException{
+         boolean enc= false;
+        
+         Document documento3 = Jsoup
+                .connect(url)
+                .userAgent("Mozilla/5.0")
+                .timeout(10 * 1000)
+                .get();
+         
+         Elements pagPosta3 = documento3.select("td");
+         
+         for(Element tds:pagPosta3){
+        
+         if (tds.className().equals("vbmenu_control") && tds.text().contains("Pág")) {
+             enc= true;
+             
+         }}
+         return enc;
+     }
      
      
     }

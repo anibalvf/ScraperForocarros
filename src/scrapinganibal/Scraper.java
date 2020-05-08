@@ -14,20 +14,17 @@ public class Scraper {
     
     
     public String SacarHD(String en){
-        
         String res= "";
-
+        if (en.isEmpty()) {
+            
+        }else{
      
-        String hd="+hd";
       try{
           //rellenar el documento con el http
           Document doc = Jsoup.connect("https://www.forocoches.com/").get();
-      
-   
           
        //obtener los links de la pagina
       Elements links= doc.select("a[href]");
-
       
       for(Element link:links){
           
@@ -42,8 +39,11 @@ public class Scraper {
       catch(IOException e){
           e.printStackTrace();
           
-      }
-         
+      }}
+        if (res.isEmpty()) {
+            res="No hay resultados";
+        }
+      
         return res;
     }
     
@@ -53,12 +53,9 @@ public class Scraper {
           try{
           //rellenar el documento con el http
           Document doc = Jsoup.connect("https://www.forocoches.com/").get();
-      
-   
           
        //obtener los links de la pagina
       Elements links= doc.select("a[href]");
-
       
       for(Element link:links){
           
