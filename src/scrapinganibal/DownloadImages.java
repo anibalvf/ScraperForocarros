@@ -16,6 +16,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import static scrapinganibal.Iu.folderPathV;
 /**
  *
  * @author anibal
@@ -23,39 +24,31 @@ import org.jsoup.select.Elements;
 public class DownloadImages {
  
     //The path of the folder that you want to save the images to
-   public static String folderPath = "C:\\Users\\aniba\\Desktop\\testfc";
+    public static String folderPath = folderPathV;
    
    
  
     public void DWI(String url) throws IOException {
         boolean enc= encMasPag(url);
-        
-        if (enc==true) {
-            Document document = Jsoup
+        Document document = Jsoup
                 .connect(url)
                 .userAgent("Mozilla/5.0")
                 .timeout(10 * 1000)
                 .get();
-         
+        
+        if (enc) {
          Elements pagPost = document.select("td");
-        
          for(Element td:pagPost){
-        
          if (td.className().equals("vbmenu_control") && td.text().contains("Pág")) {
-             
-              
-                 String almacen = td.text();
-                 
-                 
+                  String almacen = td.text();
+ 
                   System.out.println(almacen);
                   String almacen2= almacen.substring(9);
                   System.out.println(almacen2);
                   
-                  
-                  
-                 int pasarCadena = Integer.parseInt(almacen2);
+                  int pasarCadena = Integer.parseInt(almacen2);
                  
-                 do {
+                 do{
                      Document document1 = Jsoup
                 .connect(url+"&page="+pasarCadena)
                 .userAgent("Mozilla/5.0")
@@ -67,17 +60,13 @@ public class DownloadImages {
         Elements imageElements = document1.select("img");
         
         //iterate over each image
-        for(Element imageElement : imageElements){
-            if (imageElement.className().equals("imgpost")) {
-                 //make sure to get the absolute URL using abs: prefix
-            String strImageURL = imageElement.attr("abs:src");
-            
-            //download image one by one
-            downloadImage(strImageURL);
+            for(Element imageElement : imageElements){
+                if (imageElement.className().equals("imgpost")) {
+                String strImageURL = imageElement.attr("abs:src");
+                //download image one by one
+                downloadImage(strImageURL);
+                }
             }
-            
-            
-        }
                  pasarCadena--;
                 
              } while ( pasarCadena>0);
@@ -87,37 +76,31 @@ public class DownloadImages {
         }
             
         }else{
-            
-            
-                Document document1 = Jsoup
-                .connect(url)
-                .userAgent("Mozilla/5.0")
-                .timeout(10 * 1000)
-                .get();
-                     System.out.println(url);
+              System.out.println(url);
         
         //select all img tags
-        Elements imageElements = document1.select("img");
+        Elements imageElements = document.select("img");
         
         //iterate over each image
         for(Element imageElement : imageElements){
             if (imageElement.className().equals("imgpost")) {
-                 //make sure to get the absolute URL using abs: prefix
-            String strImageURL = imageElement.attr("abs:src");
-            
-            //download image one by one
-            downloadImage(strImageURL);
-          }
+                String strImageURL = imageElement.attr("abs:src");
+                downloadImage(strImageURL);
+            }
         }
        }
  
     }
+    
+    
+    
+    
+    
         //metodo para descargar cada imagen
      private static void downloadImage(String strImageURL){
         
         //get file name from image path
-        String strImageName = 
-                strImageURL.substring( strImageURL.lastIndexOf("/") + 1 );
+        String strImageName =strImageURL.substring( strImageURL.lastIndexOf("/") + 1 );
         
         System.out.println("Saving: " + strImageName + ", from: " + strImageURL);
         
@@ -151,6 +134,9 @@ public class DownloadImages {
         }
         
     }
+     
+     
+     
         // metodo para comprobar si el hilo tienes mas de una sola pagina 
      private boolean encMasPag(String url) throws IOException{
          boolean enc= false;

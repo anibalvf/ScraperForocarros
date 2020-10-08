@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
 
 
 public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu hereda las caracteristicas de JFrame y le implementao la escucha de eventos
-    
+    public static String folderPathV ;
   // private JLabel labelUNO; // etiqueta normal
   // private JLabel titulop; // etiqueta normal
    private JButton cerrar,abrirTodos; // boton normal
@@ -34,6 +34,7 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
    private JLabel imageneden;
    public JFileChooser fc; // selector de archivos
    
+   
    public Iu(){
       
        
@@ -46,9 +47,10 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
    
    
    fc = new JFileChooser(); //inicializamo el file chooser
-//   int selecction= fc.showOpenDialog(this);
-//   File fichero = fc.getSelectedFile(); 
-   //sellecion de la ruta
+//       int selecction= fc.showOpenDialog(this);
+//       
+//       File fichero = fc.getCurrentDirectory();
+    //   sellecion de la ruta
 
    
                     // para añadir imagenes
@@ -56,14 +58,16 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
     Image imagen = icono.getImage();
     ImageIcon iconoEscalado = new ImageIcon (imagen.getScaledInstance(567,300,Image.SCALE_SMOOTH)); // escala de la imagen
     
-    ImageIcon icono2 = new javax.swing.ImageIcon(getClass().getResource("\\resources\\terieh.png")); 
-    Image imagen2 = icono2.getImage();
-    ImageIcon iconoEscalado2 = new ImageIcon (imagen2.getScaledInstance(150,280,Image.SCALE_SMOOTH));
-   
-  
-   imageneden = new JLabel(iconoEscalado2);
-   imageneden.setBounds(30, 163, 150, 350);
-   add(imageneden);
+    
+                //rip eden
+//    ImageIcon icono2 = new javax.swing.ImageIcon(getClass().getResource("\\resources\\terieh.png")); 
+//    Image imagen2 = icono2.getImage();
+//    ImageIcon iconoEscalado2 = new ImageIcon (imagen2.getScaledInstance(150,280,Image.SCALE_SMOOTH));
+//   
+//  
+//   imageneden = new JLabel(iconoEscalado2);
+//   imageneden.setBounds(30, 163, 150, 350);
+//   add(imageneden);
     
     
    imagencab= new JLabel(iconoEscalado); //inicializamos la etiqueta con el contenido
@@ -183,7 +187,7 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
             
           //  labelUNO.setText("Opcion +HD Seleccionada"); // accion de escribir en una etiqueta
             
-            textarea.setText(scr.SacarHD(en));
+            textarea.setText(scr.sacarPorCodigo(en));
             Seleccion.setText("+HD");
 
             
@@ -191,7 +195,7 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
         if (e.getSource()== opcion2) {
              String en = "+pvr";
           //  labelUNO.setText("Opcion +PVR Seleccionada");
-             textarea.setText(scr.SacarHD(en));
+             textarea.setText(scr.sacarPorCodigo(en));
              Seleccion.setText("+PVR");
 
         }
@@ -199,7 +203,7 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
             String en = rellenar.getText().toLowerCase();
           //  labelUNO.setText("Opcion Palabra ");
             
-            textarea.setText(scr.SacarHD(en)); 
+            textarea.setText(scr.sacarPorCodigo(en)); 
             Seleccion.setText(rellenar.getText());
         }
         
@@ -211,21 +215,26 @@ public class Iu extends JFrame implements ActionListener{ // mi clase llamada Iu
         if(e.getSource()== menuitem2){
             setSize(1000,1000);   // cambiar la resolucion de la ventana
         }
+        
         if(e.getSource()==selecc){
-//               int selecction= fc.showOpenDialog(this);
-//               File fichero = fc.getSelectedFile();
-JFileChooser fileChooser = new JFileChooser();
-fileChooser.setDialogTitle("Specify a file to save");   
- 
-int userSelection = fileChooser.showSaveDialog(menu);
- 
-if (userSelection == JFileChooser.APPROVE_OPTION) {
-    File fileToSave = fileChooser.getSelectedFile();
-    System.out.println("Save as file: " + fileToSave.getAbsolutePath());
-}
             
             
+            //               int selecction= fc.showOpenDialog(this);
+            //               File fichero = fc.getSelectedFile();
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fileChooser.showSaveDialog(null);
+                
+                folderPathV=fileChooser.getSelectedFile().toString();
+                System.out.println(folderPathV);
+                System.out.println(fileChooser.getSelectedFile());
+
         }
+        
+        
+        
+        
+        
         if(e.getSource()==abrirTodos){
             if (Seleccion.getText().isEmpty()) {
                 
